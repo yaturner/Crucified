@@ -35,6 +35,7 @@ public class TouchMovementAppState extends AbstractAppState implements RawInputL
 
     private InputManager inputManager;
     private GameSession gameSession;
+    private TouchButtonsAppState touchButtonsAppState;
     private float screenWidth;
     private int activePointerId = -1;
     private float startX, startY;
@@ -46,6 +47,7 @@ public class TouchMovementAppState extends AbstractAppState implements RawInputL
         super.initialize(stateManager, app);
         this.inputManager = app.getInputManager();
         this.gameSession = stateManager.getState(GameSessionAppState.class).getGameSession();
+        this.touchButtonsAppState = stateManager.getState(TouchButtonsAppState.class);
         this.screenWidth = app.getContext().getSettings().getWidth();
         inputManager.addRawInputListener(this);
     }
@@ -101,7 +103,8 @@ public class TouchMovementAppState extends AbstractAppState implements RawInputL
     public void onTouchEvent(TouchEvent evt) {
         switch (evt.getType()) {
             case DOWN:
-                if (activePointerId == -1 && evt.getX() < screenWidth / 2f) {
+                if (activePointerId == -1 && evt.getX() < screenWidth / 2f
+                        && !touchButtonsAppState.isInsideButton(evt.getX(), evt.getY())) {
                     activePointerId = evt.getPointerId();
                     startX = evt.getX();
                     startY = evt.getY();

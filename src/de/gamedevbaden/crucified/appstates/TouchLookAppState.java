@@ -22,6 +22,7 @@ public class TouchLookAppState extends AbstractAppState implements RawInputListe
 
     private AppStateManager stateManager;
     private InputManager inputManager;
+    private TouchButtonsAppState touchButtonsAppState;
     private float screenWidth;
     private int activePointerId = -1;
 
@@ -30,6 +31,7 @@ public class TouchLookAppState extends AbstractAppState implements RawInputListe
         super.initialize(stateManager, app);
         this.stateManager = stateManager;
         this.inputManager = app.getInputManager();
+        this.touchButtonsAppState = stateManager.getState(TouchButtonsAppState.class);
         this.screenWidth = app.getContext().getSettings().getWidth();
         inputManager.addRawInputListener(this);
     }
@@ -45,7 +47,8 @@ public class TouchLookAppState extends AbstractAppState implements RawInputListe
     public void onTouchEvent(TouchEvent evt) {
         switch (evt.getType()) {
             case DOWN:
-                if (activePointerId == -1 && evt.getX() >= screenWidth / 2f) {
+                if (activePointerId == -1 && evt.getX() >= screenWidth / 2f
+                        && !touchButtonsAppState.isInsideButton(evt.getX(), evt.getY())) {
                     activePointerId = evt.getPointerId();
                 }
                 break;

@@ -9,6 +9,7 @@ import de.gamedevbaden.crucified.appstates.EntityDataState;
 import de.gamedevbaden.crucified.appstates.GameCommanderHolder;
 import de.gamedevbaden.crucified.appstates.PlayerInteractionState;
 import de.gamedevbaden.crucified.appstates.SceneEntityLoader;
+import de.gamedevbaden.crucified.appstates.TouchButtonsAppState;
 import de.gamedevbaden.crucified.appstates.TouchLookAppState;
 import de.gamedevbaden.crucified.appstates.TouchMovementAppState;
 import de.gamedevbaden.crucified.appstates.game.GameCommanderAppState;
@@ -82,7 +83,9 @@ public class MobileGame extends SimpleApplication {
         GameInitializer.initFirstPersonCameraView(stateManager);
 
         // touch controls: left half of the screen is a virtual joystick for
-        // movement, right half is drag-to-look for the camera.
+        // movement, right half is drag-to-look for the camera, plus fixed
+        // SPRINT/USE buttons in the bottom corners.
+        stateManager.attach(new TouchButtonsAppState());
         stateManager.attach(new TouchMovementAppState());
         stateManager.attach(new TouchLookAppState());
 

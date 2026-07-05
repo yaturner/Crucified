@@ -4,6 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.PhysicsSpace;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.collision.shapes.HeightfieldCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -539,18 +540,24 @@ public class PredictionAppState extends AbstractAppState implements ActionListen
     @Override
     public void cleanup() {
         this.inputManager.removeListener(this);
-        for (RigidBodyControl rigidBodyControl : staticBodyControls.values()) {
-            if (rigidBodyControl.getPhysicsSpace() != null) {
-                bulletAppState.getPhysicsSpace().remove(rigidBodyControl);
+
+        // BulletAppState may have already been cleaned up (and its physics space
+        // torn down) by the time this state's cleanup runs, depending on attach order.
+        PhysicsSpace physicsSpace = bulletAppState.getPhysicsSpace();
+        if (physicsSpace != null) {
+            for (RigidBodyControl rigidBodyControl : staticBodyControls.values()) {
+                if (rigidBodyControl.getPhysicsSpace() != null) {
+                    physicsSpace.remove(rigidBodyControl);
+                }
             }
-        }
 
-        for (CustomCharacterControl control : characterControlHashMap.values()) {
-            this.bulletAppState.getPhysicsSpace().remove(control);
-        }
+            for (CustomCharacterControl control : characterControlHashMap.values()) {
+                physicsSpace.remove(control);
+            }
 
-        if (playerCharacterControl != null && playerCharacterControl.getPhysicsSpace() != null) {
-            bulletAppState.getPhysicsSpace().remove(playerCharacterControl);
+            if (playerCharacterControl != null && playerCharacterControl.getPhysicsSpace() != null) {
+                physicsSpace.remove(playerCharacterControl);
+            }
         }
 
         if (player != null) {

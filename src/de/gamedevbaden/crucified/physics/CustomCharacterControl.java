@@ -19,11 +19,11 @@ public class CustomCharacterControl extends BetterCharacterControl {
     }
 
     public PhysicsRigidBody getPhysicsRigidBody() {
-        return rigidBody;
+        return getRigidBody();
     }
 
     public Quaternion getCharacterRotation() {
-        return rotation.clone();
+        return getRigidBody().getPhysicsRotation();
     }
 
 }

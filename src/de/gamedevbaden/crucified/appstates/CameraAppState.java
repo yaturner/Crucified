@@ -96,7 +96,20 @@ public class CameraAppState extends AbstractAppState implements AnalogListener, 
         inputManager.setCursorVisible(false);
     }
 
-    private void rotateCamera(float value, Vector3f axis) {       
+    /**
+     * Rotates the camera by a yaw/pitch delta, for input sources (e.g. touch
+     * drag) that aren't backed by an InputManager analog mapping.
+     */
+    public void applyLookDelta(float dx, float dy) {
+        if (dx != 0f) {
+            rotateCamera(-dx, Vector3f.UNIT_Y);
+        }
+        if (dy != 0f) {
+            rotateCamera(dy, cam.getLeft());
+        }
+    }
+
+    private void rotateCamera(float value, Vector3f axis) {
         mat.fromAngleNormalAxis(rotationSpeed * value, axis);
 
         Vector3f up = cam.getUp();

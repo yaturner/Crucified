@@ -1,3 +1,7 @@
+#ifdef GL_ES
+precision mediump float;
+#endif
+
 #import "Common/ShaderLib/Parallax.glsllib"
 #import "Common/ShaderLib/Optics.glsllib"
 #ifndef VERTEX_LIGHTING

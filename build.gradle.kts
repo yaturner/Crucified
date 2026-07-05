@@ -1,71 +1,63 @@
-group = "de.gamedevbaden"
-version = "0.1"
-
 plugins {
-    java
-    application
-    idea
+    alias(libs.plugins.android.application)
 }
 
-repositories {
-    mavenCentral()
-}
+android {
+    namespace = "de.gamedevbaden.crucified"
+    compileSdk = 34
 
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
+    defaultConfig {
+        applicationId = "de.gamedevbaden.crucified"
+        minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "0.1"
 
-application {
-    mainClass.set("de.gamedevbaden.crucified.tests.SimpleClientServerTest.ClientTest")
-}
-
-sourceSets {
-    main {
-        java {
-            setSrcDirs(listOf("src"))
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
         }
     }
-    test {
-        java {
-            setSrcDirs(listOf("test"))
+
+    sourceSets {
+        getByName("main") {
+            manifest.srcFile("AndroidManifest.xml")
+            java.setSrcDirs(
+                listOf("src")
+            )
+            assets.srcDirs("assets")
         }
     }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    javaCompiler.set(
+        javaToolchains.compilerFor {
+            languageVersion.set(JavaLanguageVersion.of(17))
+        }
+    )
 }
 
 dependencies {
-    implementation(fileTree("lib") { include("*.jar") })
+    implementation(fileTree("lib") {
+        include("*.jar")
+        exclude("*-sources.jar", "*-javadoc.jar")
+    })
 
     implementation(libs.bundles.jmonkeyengine)
 
-    // jme3-bullet(-native) was discontinued upstream after 3.3.0-alpha1;
-    // Minie is the maintained drop-in replacement (same com.jme3.bullet.* API).
+    // jme3-bullet(-native) was discontinued upstream after 3.3.0-alpha1; Minie
+    // is the maintained drop-in replacement (same com.jme3.bullet.* API),
+    // here using its "+droid" build which bundles Android native libraries.
     implementation(libs.minie)
-
-    runtimeOnly(project(":assets"))
-}
-
-tasks.register<JavaExec>("runServer") {
-    classpath = sourceSets.test.get().runtimeClasspath + files("assets", ".")
-    mainClass.set("de.gamedevbaden.crucified.tests.SimpleClientServerTest.ServerTest")
-    standardInput = System.`in`
-}
-
-tasks.register<JavaExec>("runClient") {
-    classpath = sourceSets.test.get().runtimeClasspath + files("assets", ".")
-    mainClass.set("de.gamedevbaden.crucified.tests.SimpleClientServerTest.ClientTest")
-    standardInput = System.`in`
-}
-
-tasks.register<JavaExec>("runSingleplayer") {
-    classpath = sourceSets.test.get().runtimeClasspath + files("assets", ".")
-    mainClass.set("de.gamedevbaden.crucified.tests.SingleplayerTest")
-    standardInput = System.`in`
-}
-
-tasks.register<JavaExec>("runChunk") {
-    classpath = sourceSets.test.get().runtimeClasspath + files("assets", ".")
-    mainClass.set("de.gamedevbaden.crucified.tests.ChunkTest")
-    standardInput = System.`in`
 }

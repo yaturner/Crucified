@@ -13,7 +13,7 @@ public class DarkAmbienceMusicAppState extends AbstractAppState {
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
-        this.music = new AudioNode(app.getAssetManager(), "Sounds/Music/DarkAmbienceLoop.ogg", AudioData.DataType.Stream);
+        this.music = new AudioNode(app.getAssetManager(), "Sounds/Music/DarkAmbienceLoop.ogg", AudioData.DataType.Buffer);
         music.setVolume(0.4f);
         music.setPositional(false);
         music.setLooping(true);

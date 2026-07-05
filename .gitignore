@@ -1,5 +1,6 @@
 out/
 build/
+local.properties
 nbproject/
 .idea/
 *.iml

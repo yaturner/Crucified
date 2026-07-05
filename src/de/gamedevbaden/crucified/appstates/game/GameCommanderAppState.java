@@ -22,7 +22,6 @@ import de.gamedevbaden.crucified.appstates.CameraAppState;
 import de.gamedevbaden.crucified.appstates.PlayerInteractionState;
 import de.gamedevbaden.crucified.appstates.ScenePreloader;
 import de.gamedevbaden.crucified.appstates.gui.HudAppState;
-import de.gamedevbaden.crucified.appstates.gui.NiftyAppState;
 import de.gamedevbaden.crucified.appstates.net.PredictionAppState;
 import de.gamedevbaden.crucified.appstates.paging.GameWorldPagingManager;
 import de.gamedevbaden.crucified.appstates.paging.WorldChunk;
@@ -106,11 +105,6 @@ public class GameCommanderAppState extends AbstractAppState implements GameComma
     public void loadScene(Scene scene) {
 
         System.out.println("Load Scene: " + scene);
-
-        if (stateManager.getState(NiftyAppState.class) != null) {
-            app.getStateManager().getState(NiftyAppState.class).goToScreen(NiftyAppState.NiftyScreen.LoadingScreen);
-        }
-
 
         Node world;
         ScenePreloader scenePreloader = stateManager.getState(ScenePreloader.class);
@@ -234,17 +228,6 @@ public class GameCommanderAppState extends AbstractAppState implements GameComma
             }
         });
 
-       stateManager.attach(new ScreenChanger());
-    }
-
-    private class ScreenChanger extends AbstractAppState {
-        @Override
-        public void initialize(AppStateManager stateManager, Application app) {
-            NiftyAppState niftyAppState = stateManager.getState(NiftyAppState.class);
-            if (niftyAppState != null) {
-                niftyAppState.goToScreen(NiftyAppState.NiftyScreen.EmptyScreen);
-            }
-        }
     }
 
     @Override
@@ -259,14 +242,8 @@ public class GameCommanderAppState extends AbstractAppState implements GameComma
 
     @Override
     public void onGameDecided(GameDecisionType decisionType) {
-        NiftyAppState niftyAppState = stateManager.getState(NiftyAppState.class);
-        if (niftyAppState != null) {
-          //  niftyAppState.showPopup(decisionType);
-            niftyAppState.showGameOverScreen(decisionType);
-        }
-
         // we want to play a sound
-        AudioNode endSound = new AudioNode(assetManager, "Sounds/SoundEffects/EndSound.ogg", AudioData.DataType.Stream);
+        AudioNode endSound = new AudioNode(assetManager, "Sounds/SoundEffects/EndSound.ogg", AudioData.DataType.Buffer);
         endSound.setPositional(false);
         mainWorldNode.attachChild(endSound);
         endSound.play();

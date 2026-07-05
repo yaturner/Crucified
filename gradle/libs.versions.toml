@@ -1,6 +1,7 @@
 [versions]
 jme = "3.8.1-stable"
-minie = "9.0.1"
+minie = "9.0.1+droid"
+agp = "8.13.2"
 
 [libraries]
 jme3-core = { module = "org.jmonkeyengine:jme3-core", version.ref = "jme" }
@@ -9,9 +10,8 @@ jme3-networking = { module = "org.jmonkeyengine:jme3-networking", version.ref = 
 jme3-plugins = { module = "org.jmonkeyengine:jme3-plugins", version.ref = "jme" }
 jme3-jogg = { module = "org.jmonkeyengine:jme3-jogg", version.ref = "jme" }
 jme3-terrain = { module = "org.jmonkeyengine:jme3-terrain", version.ref = "jme" }
-jme3-niftygui = { module = "org.jmonkeyengine:jme3-niftygui", version.ref = "jme" }
-jme3-desktop = { module = "org.jmonkeyengine:jme3-desktop", version.ref = "jme" }
-jme3-lwjgl3 = { module = "org.jmonkeyengine:jme3-lwjgl3", version.ref = "jme" }
+jme3-android = { module = "org.jmonkeyengine:jme3-android", version.ref = "jme" }
+jme3-android-native = { module = "org.jmonkeyengine:jme3-android-native", version.ref = "jme" }
 minie = { module = "com.github.stephengold:Minie", version.ref = "minie" }
 
 [bundles]
@@ -22,7 +22,9 @@ jmonkeyengine = [
     "jme3-plugins",
     "jme3-jogg",
     "jme3-terrain",
-    "jme3-niftygui",
-    "jme3-desktop",
-    "jme3-lwjgl3",
+    "jme3-android",
+    "jme3-android-native",
 ]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
